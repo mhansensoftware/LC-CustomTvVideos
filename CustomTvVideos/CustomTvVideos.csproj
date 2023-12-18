@@ -41,4 +41,13 @@
 	<ItemGroup>
 		<Folder Include="Lib\" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="icon.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="mm_v2_manifest.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>
