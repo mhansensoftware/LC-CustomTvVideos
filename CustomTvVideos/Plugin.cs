@@ -94,6 +94,17 @@ namespace CustomTvVideos
 
         private static int currentClip = 0;
 
+        private static void IncrementCurrentClip()
+        {
+            if (currentClip + 1 >= videoFiles.Length)
+            {
+                currentClip = 0; // Wrap around.
+                return;
+            }
+
+            currentClip++;
+        }
+
         private static void SetVideo(TVScript tv, FileInfo videoFile)
         {
             tv.video.clip = null;
@@ -127,7 +138,7 @@ namespace CustomTvVideos
 
             if (__instance.tvOn && !GameNetworkManager.Instance.localPlayerController.isInsideFactory)
             {
-                currentClip = (currentClip + 1) % videoFiles.Length;
+                IncrementCurrentClip();
                 FileInfo videoFile = videoFiles[currentClip];
 
                 logger.LogInfo($"Playing {videoFile.FullName}");
@@ -138,6 +149,7 @@ namespace CustomTvVideos
             return false;
         }
 
+        private static bool setupDone = false;
         [HarmonyPatch(typeof(TVScript), "TurnTVOnOff")]
         [HarmonyPrefix]
         public static bool TV_TurnTVOnOff(TVScript __instance, bool on)
@@ -145,19 +157,21 @@ namespace CustomTvVideos
             logger.LogInfo("TV_TurnTVOnOff");
 
             __instance.tvOn = on;
-            if ((int)__instance.video.source != 1 || __instance.video.url == "")
+            if (!setupDone)
             {
                 __instance.video.clip = null;
                 __instance.tvSFX.clip = null;
-
-                currentClip = (currentClip + 1) % videoFiles.Length;
+            
+                IncrementCurrentClip();
                 FileInfo videoFile = videoFiles[currentClip];
-
+            
                 SetVideo(__instance, videoFile);
+                setupDone = true;
             }
 
             if (on)
             {
+                IncrementCurrentClip();
                 FileInfo videoFile = videoFiles[currentClip];
                 SetVideo(__instance, videoFile);
                 SetTVScreenMaterial(__instance, true);
@@ -204,14 +218,6 @@ namespace CustomTvVideos
                 if (__instance.IsServer && !__instance.tvOn)
                 {
                     timeSinceTurningOffTV += Time.deltaTime;
-                }
-
-                currentClipTime += Time.deltaTime;
-                if ((double)currentClipTime > __instance.video.length)
-                {
-                    currentClip = (currentClip + 1) % videoFiles.Length;
-                    FileInfo videoFile = videoFiles[currentClip];
-                    SetVideo(__instance, videoFile);
                 }
             }
 
