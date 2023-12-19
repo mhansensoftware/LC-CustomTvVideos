@@ -1,7 +1,9 @@
 {
     "name": "CustomTvVideos",
-    "version_number": "0.0.1",
+    "version_number": "0.1.2",
     "website_url": "https://github.com/SakuraKade/LC-CustomTvVideos",
     "description": "Allows you to add custom videos to the ingame tv",
-    "dependencies": [ "bbepis-BepInExPack-5.4.2113" ]
+    "dependencies": [
+      "bbepis-BepInExPack-5.4.2113"
+    ]
 }
