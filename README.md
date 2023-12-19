@@ -26,3 +26,6 @@
 - .wmv
 
 **Note:** Video format support may vary depending on the platform.
+
+### Issues
+If you encounter an issue, please create an issue on GitHub.

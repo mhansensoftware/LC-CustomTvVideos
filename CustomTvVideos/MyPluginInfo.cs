@@ -6,6 +6,6 @@ namespace CustomTvVideos
     {
         public const string PLUGIN_GUID = "sakura.custom-tv-videos";
         public const string PLUGIN_NAME = "CustomTvVideos";
-        public const string PLUGIN_VERSION = "0.0.1";
+        public const string PLUGIN_VERSION = "0.1.2";
     }
 }

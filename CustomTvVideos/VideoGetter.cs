@@ -61,7 +61,7 @@ namespace CustomTvVideos
 
         private static bool IsSupportedOnCurrentPlatform(string extension, PlatformFlag platform)
         {
-            return videoFileTypes.Any(x => x.Extension == extension && x.Platform.HasFlag(platform));
+            return videoFileTypes.Any(x => string.Compare(x.Extension, extension) == 0 && x.Platform.HasFlag(platform));
         }
 
         private string[] GetSupportedVideoFiles(string dir, PlatformFlag platform)
