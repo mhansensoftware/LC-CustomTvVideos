@@ -3,6 +3,7 @@ using BepInEx.Logging;
 using CustomTvVideos.Patches;
 using HarmonyLib;
 using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -24,16 +25,26 @@ namespace CustomTvVideos
         [UsedImplicitly] // Make it so code analysis does not complain
         private void Awake()
         {
-            logger = Logger;
+            try
+            {
+                logger = Logger;
+
+                CreateDirectoryIfItDoesNotExist();
 #if DEBUG
-            SetupCustomLoggingLocation();
+                SetupCustomLoggingLocation();
+                DEBUG_TerminalPatch.Init(Logger);
+                DEBUG_DebugUtils.Init(Logger);
 #endif
-            CreateDirectoryIfItDoesNotExist();
+                
+                LoadClips();
 
-            LoadClips();
-
-            harmony.PatchAll(typeof(TvScriptPatch));
-            Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+                harmony.PatchAll(typeof(TvScriptPatch));
+                Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"Encountered an error in Awake()\n {ex}");
+            }
         }
 
         private bool LoadClips()
@@ -102,15 +113,5 @@ namespace CustomTvVideos
             Directory.CreateDirectory(videosDir);
             Logger.LogInfo($"Video Directory: {videosDir}");
         }
-
-#if DEBUG
-        [HarmonyPatch(typeof(Terminal), "Start")]
-        [HarmonyPostfix]
-        public static void Terminal_Start(Terminal __instance)
-        {
-            __instance.groupCredits = 1000;
-            logger.LogInfo("Terminal_Start");
-        }
-#endif
     }
 }

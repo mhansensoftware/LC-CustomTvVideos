@@ -14,6 +14,7 @@ namespace CustomTvVideos.Patches
     {
         private static ManualLogSource logger;
         private static FileInfo[] videoFiles;
+
         private static int currentClip;
         private static bool setupDone;
         private static bool wasTvOnLastFrame;
@@ -53,7 +54,7 @@ namespace CustomTvVideos.Patches
 
         [HarmonyPatch(typeof(TVScript), "TVFinishedClip")]
         [HarmonyPrefix]
-        public static bool TV_TVFinishedClip(TVScript __instance, VideoPlayer source)
+        private static bool TV_TVFinishedClip(TVScript __instance, VideoPlayer source)
         {
             logger.LogInfo("TV_TVFinishedClip");
 
@@ -72,9 +73,15 @@ namespace CustomTvVideos.Patches
 
         [HarmonyPatch(typeof(TVScript), "TurnTVOnOff")]
         [HarmonyPrefix]
-        public static bool TV_TurnTVOnOff(TVScript __instance, bool on)
+        private static bool TV_TurnTVOnOff(TVScript __instance, bool on)
         {
             logger.LogInfo("TV_TurnTVOnOff");
+
+#if DEBUG
+            // Expensive
+            System.Diagnostics.StackTrace DEBUG_trace = new System.Diagnostics.StackTrace();
+            DEBUG_DebugUtils.LogStackTrace(DEBUG_trace);
+#endif
 
             __instance.tvOn = on;
             if (!setupDone)
@@ -114,7 +121,7 @@ namespace CustomTvVideos.Patches
 
         [HarmonyPatch(typeof(TVScript), "Update")]
         [HarmonyPrefix]
-        public static bool TV_Update(TVScript __instance)
+        private static bool TV_Update(TVScript __instance)
         {
             if (NetworkManager.Singleton.ShutdownInProgress || GameNetworkManager.Instance.localPlayerController == null)
             {
@@ -135,7 +142,7 @@ namespace CustomTvVideos.Patches
             return false;
         }
 
-        public static void SetTVScreenMaterial(TVScript instance, bool b)
+        private static void SetTVScreenMaterial(TVScript instance, bool b)
         {
             MethodInfo method = ((object)instance).GetType().GetMethod("SetTVScreenMaterial", BindingFlags.Instance | BindingFlags.NonPublic);
             method.Invoke(instance, new object[1] { b });
