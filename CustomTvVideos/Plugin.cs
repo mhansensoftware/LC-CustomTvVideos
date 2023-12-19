@@ -36,7 +36,10 @@ namespace CustomTvVideos
                 DEBUG_DebugUtils.Init(Logger);
 #endif
                 
-                LoadClips();
+                if (!LoadClips())
+                {
+                    return;
+                }
 
                 harmony.PatchAll(typeof(TvScriptPatch));
                 Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
