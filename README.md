@@ -1,7 +1,7 @@
 **Mod Description: Sakura-CustomTvVideos**
 
 - **Version:** 0.0.1
-- **Source:** [GitHub - Sakura-CustomTvVideos](https://github.com/SakuraKade/LC-CustomTvVideos)
+- **Source:** [GitHub - Sakura-CustomTvVideos](https://github.com/mathiashansen-047/LC-CustomTvVideos)
 - **Thunderstore:** [Thunderstore Sakura-CustomTvVideos](https://thunderstore.io/c/lethal-company/p/Sakura/CustomTvVideos/)
 - **Description:** Enhance your in-game TV experience with custom videos! Sakura-CustomTvVideos allows you to seamlessly integrate personalized video content into your gameplay.
 
